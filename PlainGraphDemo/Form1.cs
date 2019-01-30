@@ -39,22 +39,22 @@ namespace Unvell.UIControl.PlainGraphDemo
 			base.OnLoad(e);
 
 			// new data source
-			DataSource ds = new DataSource("PlainGraph Sample");
+			var ds = new DataSource("PlainGraph Sample");
 
 			// new record
-			DataRecord dr = new DataRecord("DVD");
-			dr.Color = Color.SkyBlue; 
-			dr.LineWeight = 2f;       // line weight
+			var dr = new DataRecord("DVD") {Color = Color.SkyBlue, LineWeight = 2f};
 
-			dr.AddData("2010", 3000);
-			dr.AddData("2011", 3500);
-			dr.AddData("2012", 5000);
+			// line weight
+
+			dr.add_data("2010", 3000);
+			dr.add_data("2011", 3500);
+			dr.add_data("2012", 5000);
 
 			// add record
-			ds.AddData(dr); 
+			ds.add_data(dr); 
 
 			// simple way to create record and add
-			ds.AddData("Book", new Dictionary<string, double>(){
+			ds.add_data("Book", new Dictionary<string, double>(){
 				{ "2010", 2100 },
 				{ "2011", 2700 },
 				{ "2012", 2550 },

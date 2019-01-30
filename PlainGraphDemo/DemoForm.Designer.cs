@@ -1,6 +1,6 @@
 ﻿using Unvell.UIControl.PlainGraph;
 
-namespace Unvell.UIControl.PlainGraphTest
+namespace Unvell.UIControl.PlainGraphDemo
 {
 	partial class DemoForm
 	{

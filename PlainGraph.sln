@@ -1,26 +1,31 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainGraph", "PlainGraph\PlainGraph.csproj", "{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainGraphDemo", "PlainGraphDemo\PlainGraphDemo.csproj", "{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Debug|x64.ActiveCfg = Debug|x64
+		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Debug|x64.Build.0 = Debug|x64
+		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Release|x64.ActiveCfg = Release|x64
+		{74CE9196-3207-4B7A-A21D-8EA7AC89EB80}.Release|x64.Build.0 = Release|x64
+		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Debug|x64.ActiveCfg = Debug|x64
+		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Debug|x64.Build.0 = Debug|x64
+		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Release|x64.ActiveCfg = Release|x64
+		{681CCEC4-17E4-4BB6-BA08-DA6FB4843F66}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16C4CB77-7CA8-472F-893A-D1DFEBEBD1A7}
 	EndGlobalSection
 EndGlobal

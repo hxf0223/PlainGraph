@@ -17,73 +17,69 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Drawing.Printing;
 using System.Windows.Forms;
 using Unvell.UIControl.PlainGraph;
-using System.Drawing.Printing;
+using Unvell.UIControl.PlainGraphTest;
 
-namespace Unvell.UIControl.PlainGraphTest
+namespace Unvell.UIControl.PlainGraphDemo
 {
 	public partial class DemoForm : Form
 	{
 		public DemoForm()
 		{
 			InitializeComponent();
-
-			comboBox1.Items.AddRange(Enum.GetNames(typeof(PlainGraphType)));
+			comboBox1.Items.AddRange(Enum.GetNames(enumType: typeof(PlainGraphType)));
 		}
 
-		private DataSource ds = new DataSource();
+		private readonly DataSource _ds = new DataSource();
 
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
 
 			comboBox1.SelectedIndex = 2;
-
-			ds.Caption = "PlainGraph Demo Chart";
-
-			ds.XTitle = "Year";
-			ds.YTitle = "Count";
+			_ds.Caption = "PlainGraph Demo Chart";
+			_ds.XTitle = "Year";
+			_ds.YTitle = "Count";
 
 			// record 1
-			Dictionary<int, double> data1 = new Dictionary<int, double>();
-			data1.Add(2005, 300);
-			data1.Add(2006, 450);
-			data1.Add(2007, 500);
-			data1.Add(2008, 530);
-			data1.Add(2009, 680);
-			data1.Add(2010, 890);
-			data1.Add(2011, 1330);
-			DataRecord record = ds.AddData("Book", data1, Color.OliveDrab);
+			var data1 = new Dictionary<int, double> {
+				{2005, 300},
+				{2006, 450},
+				{2007, 500},
+				{2008, 530},
+				{2009, 680},
+				{2010, 890},
+				{2011, 1330}
+			};
 
+			var record = _ds.add_data("Book", data1, Color.OliveDrab);
 			record.Set[6].Style.EndCap = System.Drawing.Drawing2D.LineCap.DiamondAnchor;
+			var data2 = new Dictionary<int, double> {
+				{2005, 110},
+				{2006, 150},
+				{2007, 180},
+				{2008, 378},
+				{2009, 750},
+				{2010, 1290},
+				{2011, 1630}
+			};
+			_ds.add_data("Software", data2, Color.Orchid);
 
-			Dictionary<int, double> data2 = new Dictionary<int, double>();
-			data2.Add(2005, 110);
-			data2.Add(2006, 150);
-			data2.Add(2007, 180);
-			data2.Add(2008, 378);
-			data2.Add(2009, 750);
-			data2.Add(2010, 1290);
-			data2.Add(2011, 1630);
-			ds.AddData("Software", data2, Color.Orchid);
+			var data3 = new Dictionary<int, double> {
+				{2005, 320},
+				{2006, 410},
+				{2007, 560},
+				{2008, 595},
+				{2009, 600},
+				{2010, 670},
+				{2011, 820}
+			};
 
-			Dictionary<int, double> data3 = new Dictionary<int, double>();
-			data3.Add(2005, 320);
-			data3.Add(2006, 410);
-			data3.Add(2007, 560);
-			data3.Add(2008, 595);
-			data3.Add(2009, 600);
-			data3.Add(2010, 670);
-			data3.Add(2011, 820);
-			ds.AddData("DVD", data3, Color.SaddleBrown);
-
-			graph.DataSource = ds;
+			_ds.add_data("DVD", data3, Color.SaddleBrown);
+			graph.DataSource = _ds;
 		}
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -108,7 +104,7 @@ namespace Unvell.UIControl.PlainGraphTest
 
 		private void printReviewToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			PrintPreviewDialog ppd = new PrintPreviewDialog()
+			var ppd = new PrintPreviewDialog()
 			{
 				Document = new PrintDocument()
 			};
@@ -116,22 +112,16 @@ namespace Unvell.UIControl.PlainGraphTest
 
 			ppd.PrintPreviewControl.Zoom = 1d;
 
-			Rectangle screenSize = Screen.FromControl(this).WorkingArea;
-			ppd.SetBounds(50, 50, screenSize.Width / 2, screenSize.Height - 100);
+			var screen_size = Screen.FromControl(this).WorkingArea;
+			ppd.SetBounds(50, 50, screen_size.Width / 2, screen_size.Height - 100);
 
 			ppd.ShowDialog();
 		}
 
 		private void printToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			PrintDialog pd = new PrintDialog()
-			{
-				Document = new PrintDocument(),
-			};
-			pd.UseEXDialog = true;
-
+			var pd = new PrintDialog {Document = new PrintDocument(), UseEXDialog = true,};
 			graph.Print(pd.Document);
-
 			pd.ShowDialog();
 		}
 
