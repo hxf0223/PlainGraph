@@ -30,152 +30,143 @@ namespace Unvell.UIControl.PlainGraph {
 
     #region Graph Control Host
     public partial class GraphControl : Control {
-        private PlainGraphType graphType = PlainGraphType.Line;
+        private PlainGraphType _graph_type = PlainGraphType.Line;
 
         /// <summary>
         /// Specify which one of Chart type should be displayed
         /// </summary>
         public PlainGraphType GraphType {
-            get { return graphType; }
-            set {
-                if (graphType != value) {
-                    graphType = value;
+            get => _graph_type;
+			set {
+				if (_graph_type == value) return;
+				_graph_type = value;
 
-                    if (graphType != lastGraphType) {
-                        graph = PlainGraphFactory.create_plain_graph(graphType);
+				if (_graph_type == _last_graph_type) return;
+				Graph = PlainGraphFactory.create_plain_graph(_graph_type);
 
-                        graph.Margin = graphMargin;
-                        graph.IsShowLegend = isShowLegend;
-                        graph.Bounds = ClientRectangle;
-                        graph.DataSource = DataSource;
-                        lastGraphType = graphType;
-                        Invalidate();
-                    }
-                }
-            }
+				Graph.Margin = _graph_margin;
+				Graph.IsShowLegend = _is_show_legend;
+				Graph.Bounds = ClientRectangle;
+				Graph.DataSource = DataSource;
+				_last_graph_type = _graph_type;
+				Invalidate();
+			}
         }
 
-        private PlainGraphType lastGraphType = PlainGraphType.Line;
+        private PlainGraphType _last_graph_type = PlainGraphType.Line;
 
-        private PlainCommonGraph graph = new LineGraph();
-
-        /// <summary>
+		/// <summary>
         /// PlainGraph core object to render chart
         /// </summary>
-        public PlainCommonGraph Graph {
-            get { return graph; }
-        }
+        public PlainCommonGraph Graph { get; private set; } = new LineGraph();
 
-        #region Settings
+		#region Settings
 
-        private bool isAntiAlias = true;
+        private bool _is_anti_alias = true;
 
         [DefaultValue(true)]
         public bool IsAntiAlias {
-            get { return isAntiAlias; }
-            set {
-                isAntiAlias = value;
+            get => _is_anti_alias;
+			set {
+                _is_anti_alias = value;
                 Invalidate();
             }
         }
 
-        private bool isShowLegend = true;
+        private bool _is_show_legend = true;
 
         /// <summary>
         /// Specify whether legend should be displayed 
         /// </summary>
         [DefaultValue(true)]
         public bool IsShowLegend {
-            get { return graph.IsShowLegend; }
-            set {
-                isShowLegend = graph.IsShowLegend = value;
-                graph.UpdateBounds(ClientRectangle);
+            get => Graph.IsShowLegend;
+			set {
+                _is_show_legend = Graph.IsShowLegend = value;
+                Graph.UpdateBounds(ClientRectangle);
                 Invalidate();
             }
         }
 
-        private bool isShowEntityName = true;
+		public bool isShowEntityName = true;
 
         /// <summary>
         /// Specify whether the name of data entity should be displayed
         /// </summary>
         [DefaultValue(false)]
         public bool IsShowEntityName {
-            get { return graph.IsShowEntityName; }
-            set {
-                if (isShowEntityName != value) {
-                    isShowEntityName = graph.IsShowEntityName = value;
-                    Invalidate();
-                }
-            }
+            get => Graph.IsShowEntityName;
+			set {
+				if (isShowEntityName == value) return;
+				isShowEntityName = Graph.IsShowEntityName = value;
+				Invalidate();
+			}
         }
 
-        private bool isShowDataTip = false;
+        private bool _is_show_data_tip = false;
 
         /// <summary>
         /// Specify whether tip of data should be displayed
         /// </summary>
         [DefaultValue(false)]
         public bool IsShowDataTip {
-            get { return graph.IsShowDataTip; }
-            set {
-                if (isShowDataTip != value) {
-                    isShowDataTip = graph.IsShowDataTip = value;
-                    Invalidate();
-                }
-            }
+            get => Graph.IsShowDataTip;
+			set {
+				if (_is_show_data_tip == value) return;
+				_is_show_data_tip = Graph.IsShowDataTip = value;
+				Invalidate();
+			}
         }
 
-        private bool isShowDataValue = false;
+        private bool _is_show_data_value = false;
 
         /// <summary>
         /// Specify whether value of data should be displayed
         /// </summary>
         [DefaultValue(false)]
         public bool IsShowDataValue {
-            get { return graph.IsShowDataValue; }
-            set {
-                if (isShowDataValue != value) {
-                    isShowDataValue = graph.IsShowDataValue = value;
-                    Invalidate();
-                }
-            }
+            get => Graph.IsShowDataValue;
+			set {
+				if (_is_show_data_value == value) return;
+				_is_show_data_value = Graph.IsShowDataValue = value;
+				Invalidate();
+			}
         }
 
         /// <summary>
         /// Font of x-axis ruler
         /// </summary>
         public Font XRulerFont {
-            get { return graph.XRulerFont; }
-            set { graph.XRulerFont = value; Invalidate(); }
+            get => Graph.XRulerFont;
+			set { Graph.XRulerFont = value; Invalidate(); }
         }
 
         /// <summary>
         /// Font of y-axis ruler
         /// </summary>
         public Font YRulerFont {
-            get { return graph.YRulerFont; }
-            set { graph.YRulerFont = value; Invalidate(); }
+            get => Graph.YRulerFont;
+			set { Graph.YRulerFont = value; Invalidate(); }
         }
 
         /// <summary>
         /// Font of legend
         /// </summary>
         public Font LegendFont {
-            get { return graph.LegendFont; }
-            set { graph.LegendFont = value; Invalidate(); }
+            get => Graph.LegendFont;
+			set { Graph.LegendFont = value; Invalidate(); }
         }
 
-        private Padding graphMargin;
+        private Padding _graph_margin;
 
         /// <summary>
         /// Margin for chart
         /// </summary>
         public Padding GraphMargin {
-            get { return graphMargin = graph.Margin; }
+            get { return _graph_margin = Graph.Margin; }
             set {
-                graphMargin = graph.Margin = value;
-                graph.UpdateBounds(ClientRectangle);
+                _graph_margin = Graph.Margin = value;
+                Graph.UpdateBounds(ClientRectangle);
                 Invalidate();
             }
         }
@@ -191,20 +182,20 @@ namespace Unvell.UIControl.PlainGraph {
         #endregion
 
         protected override void OnCreateControl() {
-            graph.Bounds = ClientRectangle;
+            Graph.Bounds = ClientRectangle;
             base.OnCreateControl();
         }
 
-        private DataSource dataSource;
+        private DataSource _data_source;
 
         /// <summary>
         /// Data source to render chart
         /// </summary>
         public DataSource DataSource {
-            get { return dataSource; }
-            set {
-                dataSource = value;
-                graph.DataSource = value;
+            get => _data_source;
+			set {
+                _data_source = value;
+                Graph.DataSource = value;
                 Invalidate();
             }
         }
@@ -224,23 +215,23 @@ namespace Unvell.UIControl.PlainGraph {
         }
 
         internal void Draw(Graphics g, Rectangle clip) {
-            graph.Font = Font;
+            Graph.Font = Font;
 
-            SmoothingMode oldSmoothingMode = SmoothingMode.Default;
-            if (isAntiAlias) {
-                oldSmoothingMode = g.SmoothingMode;
+            var old_smoothing_mode = SmoothingMode.Default;
+            if (_is_anti_alias) {
+                old_smoothing_mode = g.SmoothingMode;
                 g.SmoothingMode = SmoothingMode.AntiAlias;
             }
-            graph.Draw(g, clip);
-            if (isAntiAlias) {
-                g.SmoothingMode = oldSmoothingMode;
+            Graph.Draw(g, clip);
+            if (_is_anti_alias) {
+                g.SmoothingMode = old_smoothing_mode;
             }
         }
 
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
 
-            graph.UpdateBounds(ClientRectangle);
+            Graph.UpdateBounds(ClientRectangle);
             Invalidate();
         }
     }
@@ -261,133 +252,41 @@ namespace Unvell.UIControl.PlainGraph {
 
     public abstract class PlainCommonGraph {
         #region Border Attributes
-        private Rectangle bounds;
+        private Rectangle _bounds;
 
         public Rectangle Bounds {
-            get { return bounds; }
-            set {
-                UpdateBounds(value);
-            }
-        }
+            get => _bounds;
+			set => UpdateBounds(value);
+		}
 
-        private Rectangle borderBounds;
+		public Rectangle BorderBounds { get; set; }
+		public Rectangle CaptionBounds { get; set; }
+		public Rectangle GraphBounds { get; set; }
+		public Rectangle LegendBounds { get; set; }
+		public Padding Margin { get; set; }
 
-        public Rectangle BorderBounds {
-            get { return borderBounds; }
-            set { borderBounds = value; }
-        }
-
-        private Rectangle captionBounds;
-
-        public Rectangle CaptionBounds {
-            get { return captionBounds; }
-            set { captionBounds = value; }
-        }
-
-        private Rectangle graphBounds;
-
-        public Rectangle GraphBounds {
-            get { return graphBounds; }
-            set { graphBounds = value; }
-        }
-
-        private Rectangle legendBounds;
-
-        public Rectangle LegendBounds {
-            get { return legendBounds; }
-            set { legendBounds = value; }
-        }
-
-        private Padding margin;
-
-        public Padding Margin {
-            get { return margin; }
-            set { margin = value; }
-        }
-        #endregion
+		#endregion
 
         #region UI Attributes
-        private Font font = SystemFonts.DefaultFont;
 
-        public Font Font {
-            get { return font; }
-            set { font = value; }
-        }
+		public Font Font { get; set; } = SystemFonts.DefaultFont;
+		public Color CaptionColor { get; set; }
+		public Font TitleFont { get; set; } = new Font(SystemFonts.DefaultFont.FontFamily, 14f, FontStyle.Bold);
+		public Font XRulerFont { get; set; } = SystemFonts.DefaultFont;
+		public Font YRulerFont { get; set; } = SystemFonts.DefaultFont;
+		public Font LegendFont { get; set; } = SystemFonts.DefaultFont;
+		public int LegendWidth { get; set; } = 80;
 
-        private Color captionColor;
-
-        public Color CaptionColor {
-            get { return captionColor; }
-            set { captionColor = value; }
-        }
-
-        private Font titleFont = new Font(SystemFonts.DefaultFont.FontFamily, 14f, FontStyle.Bold);
-
-        public Font TitleFont {
-            get { return titleFont; }
-            set { titleFont = value; }
-        }
-
-        private Font xRulerFont = SystemFonts.DefaultFont;
-
-        public Font XRulerFont {
-            get { return xRulerFont; }
-            set { xRulerFont = value; }
-        }
-
-        private Font yRulerFont = SystemFonts.DefaultFont;
-
-        public Font YRulerFont {
-            get { return yRulerFont; }
-            set { yRulerFont = value; }
-        }
-
-        private Font legendFont = SystemFonts.DefaultFont;
-
-        public Font LegendFont {
-            get { return legendFont; }
-            set { legendFont = value; }
-        }
-
-        private int legendWidth = 80;
-
-        public int LegendWidth {
-            get { return legendWidth; }
-            set { legendWidth = value; }
-        }
-        #endregion
+		#endregion
 
         #region Behavior Attributes
 
-        private bool isShowLegend = true;
+		public bool IsShowLegend { get; set; } = true;
+		public bool IsShowEntityName { get; set; } = false;
+		public bool IsShowDataTip { get; set; } = false;
+		public bool IsShowDataValue { get; set; } = false;
 
-        public bool IsShowLegend {
-            get { return isShowLegend; }
-            set { isShowLegend = value; }
-        }
-
-        private bool isShowEntityName = false;
-
-        public bool IsShowEntityName {
-            get { return isShowEntityName; }
-            set { isShowEntityName = value; }
-        }
-
-        private bool isShowDataTip = false;
-
-        public bool IsShowDataTip {
-            get { return isShowDataTip; }
-            set { isShowDataTip = value; }
-        }
-
-        private bool isShowDataValue = false;
-
-        public bool IsShowDataValue {
-            get { return isShowDataValue; }
-            set { isShowDataValue = value; }
-        }
-
-        //private bool isShowPosAssistLineX = false;
+		//private bool isShowPosAssistLineX = false;
         //private bool isShowPosAssistLineY = false;
 
         #endregion
@@ -397,88 +296,64 @@ namespace Unvell.UIControl.PlainGraph {
         }
 
         public PlainCommonGraph(Rectangle bounds) {
-            this.Bounds = bounds;
+            Bounds = bounds;
         }
         #endregion
 
         #region Data Attributes
-        private DataSource dataSource;
+        private DataSource _data_source;
 
         public DataSource DataSource {
-            get { return dataSource; }
-            set { UpdateDataSource(value); }
-        }
+            get => _data_source;
+			set => UpdateDataSource(value);
+		}
 
-        private PlainGraphDisplayFormat keyDisplayFormat = PlainGraphDisplayFormat.Integer;
+		public PlainGraphDisplayFormat KeyDisplayFormat { get; set; } = PlainGraphDisplayFormat.Integer;
+		public PlainGraphDisplayFormat ValueDisplayFormat { get; set; } = PlainGraphDisplayFormat.Integer;
 
-        public PlainGraphDisplayFormat KeyDisplayFormat {
-            get { return keyDisplayFormat; }
-            set { keyDisplayFormat = value; }
-        }
+		protected DataInfo recordInfo = new DataInfo();
+		public List<string> XDataKeys { get; set; } = new List<string>();
+		public Dictionary<Color, string> Legends { get; set; } = new Dictionary<Color, string>();
 
-        private PlainGraphDisplayFormat valueDisplayFormat = PlainGraphDisplayFormat.Integer;
-
-        public PlainGraphDisplayFormat ValueDisplayFormat {
-            get { return valueDisplayFormat; }
-            set { valueDisplayFormat = value; }
-        }
-
-        protected DataInfo recordInfo = new DataInfo();
-
-        private List<string> xDataKeys = new List<string>();
-
-        public List<string> XDataKeys {
-            get { return xDataKeys; }
-            set { xDataKeys = value; }
-        }
-
-        private Dictionary<Color, string> legends = new Dictionary<Color, string>();
-
-        public Dictionary<Color, string> Legends {
-            get { return legends; }
-            set { legends = value; }
-        }
-
-        #endregion
+		#endregion
 
         #region Update
         public virtual void UpdateBounds(Rectangle newBounds) {
-            bounds = newBounds;
+            _bounds = newBounds;
 
-            borderBounds = new Rectangle(bounds.Left + margin.Left, bounds.Top + margin.Top,
-                bounds.Right - margin.Right - margin.Left, bounds.Bottom - margin.Bottom - margin.Top);
+            BorderBounds = new Rectangle(_bounds.Left + Margin.Left, _bounds.Top + Margin.Top,
+                _bounds.Right - Margin.Right - Margin.Left, _bounds.Bottom - Margin.Bottom - Margin.Top);
 
-            captionBounds = new Rectangle(borderBounds.Left + 20, borderBounds.Top + 10, borderBounds.Width - 20, 24);
+            CaptionBounds = new Rectangle(BorderBounds.Left + 20, BorderBounds.Top + 10, BorderBounds.Width - 20, 24);
 
-            if (isShowLegend) {
-                legendBounds = new Rectangle(borderBounds.Right - legendWidth - 10,
-                    captionBounds.Bottom + 10, legendWidth,
-                    borderBounds.Height - captionBounds.Height - 10);
+            if (IsShowLegend) {
+                LegendBounds = new Rectangle(BorderBounds.Right - LegendWidth - 10,
+                    CaptionBounds.Bottom + 10, LegendWidth,
+                    BorderBounds.Height - CaptionBounds.Height - 10);
             } else {
-                legendBounds = Rectangle.Empty;
+                LegendBounds = Rectangle.Empty;
             }
 
-            graphBounds = new Rectangle(borderBounds.Left + 10,
+            GraphBounds = new Rectangle(BorderBounds.Left + 10,
                 CaptionBounds.Bottom + 10,
-                borderBounds.Width - legendBounds.Width - 30,
-                borderBounds.Height - captionBounds.Bottom - 10);
+                BorderBounds.Width - LegendBounds.Width - 30,
+                BorderBounds.Height - CaptionBounds.Bottom - 10);
 
-            OnUpdateBounds(borderBounds);
+            OnUpdateBounds(BorderBounds);
         }
 
         protected abstract void OnUpdateBounds(Rectangle bounds);
 
         public void UpdateDataSource(DataSource dataSource) {
-            this.dataSource = dataSource;
-
+            _data_source = dataSource;
             recordInfo = new DataInfo();
 
             // preprocess
-            if (dataSource != null && dataSource.Records != null && dataSource.Records.Count != 0) {
-                DataRecord maxSetRecord = null;
-                bool autoFindSetKeys = DataSource.XDataKeys == null || DataSource.XDataKeys.Count == 0;
+            if (dataSource?.Records != null && dataSource.Records.Count != 0) {
+                DataRecord max_set_record = null;
+                var auto_find_set_keys = DataSource.XDataKeys == null || DataSource.XDataKeys.Count == 0;
 
-                recordInfo.maxEntityCount = dataSource.Records.Max(r => r.Set == null ? 0 : r.Set.Count());
+                recordInfo.maxEntityCount = dataSource.Records.Max(r => r.Set?.Count() ?? 0);
                 recordInfo.columnTotal = new double[recordInfo.maxEntityCount];
                 recordInfo.columnMax = new double[recordInfo.maxEntityCount];
                 recordInfo.columnMin = new double[recordInfo.maxEntityCount];
@@ -489,15 +364,15 @@ namespace Unvell.UIControl.PlainGraph {
                 recordInfo.recordMin = new double[recordInfo.recordCount];
 
                 if (DataSource.Records != null) {
-                    for (int r = 0; r < DataSource.Records.Count; r++) {
-                        DataRecord row = DataSource.Records[r];
+                    for (var r = 0; r < DataSource.Records.Count; r++) {
+                        var row = DataSource.Records[r];
 
-                        if (autoFindSetKeys && (maxSetRecord == null || row.Set.Count > maxSetRecord.Set.Count)) maxSetRecord = row;
+                        if (auto_find_set_keys && (max_set_record == null || row.Set.Count > max_set_record.Set.Count)) max_set_record = row;
 
-                        double recordTotal = 0;
+                        double record_total = 0;
 
-                        for (int i = 0; i < row.Set.Count; i++) {
-                            DataEntity entity = row.Set[i];
+                        for (var i = 0; i < row.Set.Count; i++) {
+                            var entity = row.Set[i];
 
                             if ((this is PieGraph)) {
                                 if (entity.Style == null) entity.Style = new DataEntityStyle();
@@ -506,7 +381,7 @@ namespace Unvell.UIControl.PlainGraph {
                                 }
                             }
 
-                            recordTotal += entity.Value;
+                            record_total += entity.Value;
 
                             recordInfo.columnTotal[i] += entity.Value;
                             recordInfo.columnTotalMax = Math.Max(recordInfo.columnTotalMax, recordInfo.columnTotal[i]);
@@ -518,16 +393,16 @@ namespace Unvell.UIControl.PlainGraph {
                             recordInfo.minValue = Math.Min(recordInfo.minValue, entity.Value);
                         }
 
-                        recordInfo.recordTotal[r] = recordTotal;
-                        recordInfo.recordMax[r] = Math.Max(recordInfo.recordMax[r], recordTotal);
-                        recordInfo.recordMin[r] = Math.Min(recordInfo.recordMin[r], recordTotal);
+                        recordInfo.recordTotal[r] = record_total;
+                        recordInfo.recordMax[r] = Math.Max(recordInfo.recordMax[r], record_total);
+                        recordInfo.recordMin[r] = Math.Min(recordInfo.recordMin[r], record_total);
 
-                        recordInfo.total += recordTotal;
+                        recordInfo.total += record_total;
                     }
                 }
 
-                if (autoFindSetKeys && maxSetRecord != null)
-                    XDataKeys = (from r in maxSetRecord.Set select r.Key.ToString()).ToList();
+                if (auto_find_set_keys && max_set_record != null)
+                    XDataKeys = (from r in max_set_record.Set select r.Key.ToString()).ToList();
                 else
                     XDataKeys = DataSource.XDataKeys;
 
@@ -540,12 +415,11 @@ namespace Unvell.UIControl.PlainGraph {
             //UpdateBounds(bounds);
             OnUpdateDataSource();
 
-            legends.Clear();
+            Legends.Clear();
             SelectLegends();
         }
 
         protected abstract void OnUpdateDataSource();
-
         protected abstract void SelectLegends();
 
         #endregion
@@ -553,9 +427,9 @@ namespace Unvell.UIControl.PlainGraph {
         #region Draw
 
         public void DrawToImage(Image img, bool isAntiAlias) {
-            Rectangle rect = new Rectangle(0, 0, img.Width, img.Height);
+            var rect = new Rectangle(0, 0, img.Width, img.Height);
             UpdateBounds(rect);
-            using (Graphics g = Graphics.FromImage(img)) {
+            using (var g = Graphics.FromImage(img)) {
                 if (isAntiAlias) {
                     g.SmoothingMode = SmoothingMode.AntiAlias;
                     g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
@@ -565,10 +439,10 @@ namespace Unvell.UIControl.PlainGraph {
         }
 
         internal virtual void Draw(Graphics g, Rectangle clip) {
-            if (bounds.Width == 0 || bounds.Height == 0) return;
+            if (_bounds.Width == 0 || _bounds.Height == 0) return;
 
             // draw border
-            using (Pen p = new Pen(Color.Gray)) {
+            using (var p = new Pen(Color.Gray)) {
                 p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
                 p.Color = Color.Black;
@@ -583,58 +457,57 @@ namespace Unvell.UIControl.PlainGraph {
             }
 
             DrawGraph(g);
-            if (isShowLegend) DrawLegend(g);
+            if (IsShowLegend) DrawLegend(g);
 
-            if (dataSource != null && !string.IsNullOrEmpty(dataSource.Caption)) {
-                g.DrawString(dataSource.Caption, titleFont, Brushes.Black, captionBounds);
+            if (_data_source != null && !string.IsNullOrEmpty(_data_source.Caption)) {
+                g.DrawString(_data_source.Caption, TitleFont, Brushes.Black, CaptionBounds);
             }
         }
 
         protected abstract void DrawGraph(Graphics g);
 
         protected virtual void DrawLegend(Graphics g) {
-            if (dataSource == null) return;
+            if (_data_source == null) return;
 
-            int x = legendBounds.Left;
+            var x = LegendBounds.Left;
+            var total_height = 0;
 
-            int totalHeight = 0;
+            var item_rects = new Rectangle[Legends.Count];
+            var color_rects = new Rectangle[Legends.Count];
 
-            Rectangle[] itemRects = new Rectangle[legends.Count];
-            Rectangle[] colorRects = new Rectangle[legends.Count];
+            var i = 0;
+            foreach (var c in Legends.Keys) {
+                item_rects[i] = new Rectangle(LegendBounds.Left, 0, LegendBounds.Width, 20);
 
-            int i = 0;
-            foreach (Color c in legends.Keys) {
-                itemRects[i] = new Rectangle(legendBounds.Left, 0, legendBounds.Width, 20);
-
-                SizeF legendStrSize = g.MeasureString(legends[c], font, legendBounds.Width - 20);
-                int height = (int)legendStrSize.Height;
+                var legend_str_size = g.MeasureString(Legends[c], Font, LegendBounds.Width - 20);
+                var height = (int)legend_str_size.Height;
                 if (height < 20) height = 20;
-                itemRects[i].Height = height;
-                totalHeight += height;
+                item_rects[i].Height = height;
+                total_height += height;
 
-                colorRects[i] = new Rectangle(itemRects[i].Left, 0, 12, 12);
-
+                color_rects[i] = new Rectangle(item_rects[i].Left, 0, 12, 12);
                 i++;
             }
 
             i = 0;
 
-            int y = legendBounds.Top + (legendBounds.Height - totalHeight) / 2;
-            foreach (Color c in legends.Keys) {
-                itemRects[i].Y = y;
-                colorRects[i].Y = y;
+            var y = LegendBounds.Top + (LegendBounds.Height - total_height) / 2;
+            foreach (var c in Legends.Keys) {
+                item_rects[i].Y = y;
+                color_rects[i].Y = y;
 
-                Rectangle textRect = new Rectangle(colorRects[i].Right + 2, y, legendBounds.Width, itemRects[i].Height);
+                var text_rect = new Rectangle(color_rects[i].Right + 2, y, LegendBounds.Width, item_rects[i].Height);
                 using (Brush b = new SolidBrush(c)) {
-                    g.FillRectangle(b, colorRects[i]);
+                    g.FillRectangle(b, color_rects[i]);
                 }
-                using (StringFormat sf = new StringFormat()) {
+
+                using (var sf = new StringFormat()) {
                     sf.Alignment = StringAlignment.Near;
                     sf.LineAlignment = StringAlignment.Near;
-                    g.DrawString(legends[c], font, Brushes.Black, textRect);
+                    g.DrawString(Legends[c], Font, Brushes.Black, text_rect);
                 }
 
-                y += itemRects[i].Height;
+                y += item_rects[i].Height;
             }
         }
         #endregion
@@ -919,7 +792,6 @@ namespace Unvell.UIControl.PlainGraph {
     public class LineGraph : CoordinateGraph {
         protected override void draw_record(Graphics g, int index, int interval) {
             var record = DataSource.Records[index];
-
             var bounds = GraphBounds;
 
             var cur_p = new Point(bounds.Left + 5 + interval / 2, bounds.Bottom);
@@ -983,9 +855,9 @@ namespace Unvell.UIControl.PlainGraph {
     #region LinePointGraph
 
     public class LinePointGraph : LineGraph {
-        private static readonly int PointSize = 5;
+		private const int PointSize = 5;
 
-        protected override void draw_point(Graphics g, DataEntity entity, Point p, DataRecord record) {
+		protected override void draw_point(Graphics g, DataEntity entity, Point p, DataRecord record) {
             if (entity.Style != null && entity.Style.EndCap != LineCap.Flat) return;
             var size = (int)(record.LineWeight * 0.75f * PointSize);
             if (size < 5) size = 5;
